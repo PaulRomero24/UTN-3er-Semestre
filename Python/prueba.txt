@@ -1,0 +1,22 @@
+Programamos con diferentes tipos de escritura. Ahora escribimos en formato txt 
+Podemos escribir varias lineas usando el salto de linea, con Alt + 92 
+Es importante cerrar el archivo después de usarlo para liberar recursos y evitar errores 
+las letras para manejar archivos son: 
+r (leer)
+ w (escribir)
+ a (agregar) 
+ x (crear)
+Si queremos escribir sin sobreescribir el archivo, usamos la letra a (agregar) en lugar de w (escribir)
+Si queremos crear un archivo nuevo, usamos la letra x (crear), si el archivo ya existe da error
+Texto para leer con readlines()y acceder a una línea específica usando el índice de la lista devuelta por readlines()
+Tambien podemos usar el tipo de archivo que queramos,por ejemplo: 
+archivo.csv, 
+archivo.json, 
+archivo.xml, etc.
+Tambien podemos usar las letras : 
+t (texto) 
+b (binario) 
++ (lectura y escritura) 
+a+ (agregar y leer) 
+w+ (escribir y leer) 
+x+ (crear y leer)
