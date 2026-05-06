@@ -34,3 +34,15 @@ Los métodos de acceso pueden ser privados, protegidos, o públicos, dependiendo
 - **Público**: Accesible desde cualquier parte del programa.    
 - **Paquete**: Accesible solo dentro del mismo paquete (sin modificador de acceso).
 - Default: Si no se especifica un modificador de acceso, el método es accesible solo dentro del mismo paquete.
+
+## Clase 4
+
+Aprendemos conceptos de sobreescritura y polimorfismo en JAVA
+
+### Sobreescritura(@Override)
+
+La sobreescritura de métodos (method overriding) en Java permite a una subclase proporcionar una implementación específica de un método ya definido en su superclase. Es clave para el polimorfismo, asegurando que se ejecute el comportamiento de la clase hija en tiempo de ejecución. El método debe tener el mismo nombre, parámetros y tipo de retorno.
+
+### Polimorfismo
+
+El polimorfismo en Java es un pilar de la programación orientada a objetos (POO) que permite a objetos de distintas clases responder de formas diferentes a un mismo mensaje o método. Se logra mediante herencia e interfaces, permitiendo que una referencia de una superclase apunte a subclases, mejorando la flexibilidad y reutilización del código
