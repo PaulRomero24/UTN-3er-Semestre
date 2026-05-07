@@ -46,3 +46,18 @@ La sobreescritura de métodos (method overriding) en Java permite a una subclase
 ### Polimorfismo
 
 El polimorfismo en Java es un pilar de la programación orientada a objetos (POO) que permite a objetos de distintas clases responder de formas diferentes a un mismo mensaje o método. Se logra mediante herencia e interfaces, permitiendo que una referencia de una superclase apunte a subclases, mejorando la flexibilidad y reutilización del código
+
+## Clase 5
+    Vemos las conversion de objetos (downcasting y upcasting),clases object ,clases abstractas
+
+### Conversion de Objetos
+- **Upcasting**: Es la conversión de un objeto de una subclase a un tipo de su superclase. Es segura y se realiza automáticamente, ya que la subclase es un tipo de su superclase.
+- **Downcasting**: Es la conversión de un objeto de una superclase a un tipo de su subclase. Es insegura y requiere una conversión explícita, ya que no todas las instancias de la superclase son necesariamente instancias de la subclase.
+
+### Clases Object
+La clase `Object` es la superclase raíz de todas las clases en Java. Todos los objetos en Java heredan de `Object`, lo que significa que tienen acceso a sus métodos, como `toString()`, `equals()`, `hashCode()`, entre otros.
+* `equals()` es un método que se utiliza para comparar dos objetos en Java. Por defecto, el método `equals()` en la clase `Object` compara las referencias de los objetos, lo que significa que solo devuelve `true` si ambos objetos son la misma instancia. Sin embargo, muchas clases sobrescriben este método para proporcionar una comparación basada en el contenido de los objetos, lo que permite comparar objetos de manera más significativa.
+* `hashCode()` es un método que devuelve un valor entero que representa el código hash del objeto. Este código se utiliza principalmente en estructuras de datos como `HashMap` y `HashSet` para almacenar y recuperar objetos de manera eficiente. Es importante que si se sobrescribe el método `equals()`, también se sobrescriba el método `hashCode()` para mantener la coherencia entre ambos métodos.
+
+### Clases Abstractas
+Una clase abstracta en Java es una clase que no puede ser instanciada y que puede contener métodos abstractos (métodos sin implementación) y métodos concretos (métodos con implementación). Las clases abstractas se utilizan para definir una plantilla para otras clases, permitiendo que las subclases proporcionen implementaciones específicas para los métodos abstractos.
