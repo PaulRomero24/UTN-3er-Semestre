@@ -75,3 +75,12 @@ Los datos se crean,modifican en forma de tuplas siendo las mas comunes
  *Tuplas de un solo elemento: Si solo vas a pasar un dato, recuerda poner la coma final: (valor,) no (valor).
 
 *conexion.commit() Sin llamar a este método, es posible que sus actualizaciones, inserciones o eliminaciones solo existan en un estado "preparado" temporal y se perderán una vez que se cierre la conexión.
+
+## CLASE 6
+Trabajando con transacciones en PostgreSQL utilizando Python
+*Transacción: Es una unidad de trabajo que se ejecuta de manera atómica, es decir, todas las operaciones dentro de la transacción se completan exitosamente o ninguna de ellas se aplica a la base de datos. Esto garantiza la integridad de los datos y evita estados inconsistentes.
+
+### Transacciones manuales
+En este ejemplo, se realizan dos operaciones en la base de datos: una inserción y una actualización. Si ambas operaciones se ejecutan correctamente, se llama a commit() para confirmar la transacción y guardar los cambios en la base de datos. Si ocurre un error en cualquiera de las operaciones, se llama a rollback() para revertir la transacción y mantener la integridad de los datos. Finalmente, se cierra la conexión a la base de datos.
+### Transacciones con bloque with
+Con el bloque with, se hace de manera automática el commit de la transacción al finalizar el bloque, o un rollback si ocurre una excepción.
