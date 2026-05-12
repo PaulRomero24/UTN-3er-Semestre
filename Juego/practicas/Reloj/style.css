@@ -509,3 +509,12 @@ body::before {
 .status-badge span.warn {
     color: var(--orange);
 }
+
+.Preguntas {
+    margin-top: 20px;
+    text-align: center;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 1.2rem;
+    color: var(--text);
+    line-height: 1.8;
+}
