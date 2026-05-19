@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="n-reinas.css">
+    <title>N — REINAS</title>
+</head>
+
+<body>
+    <header>
+        <h1>N — REINAS</h1>
+        <p>Backtracking · Visualización paso a paso</p>
+    </header>
+
+    <!-- Controls -->
+    <div class="controls">
+        <span class="ctrl-label">N =</span>
+        <div class="n-selector">
+            <button class="n-btn" id="btnMinus" onclick="changeN(-1)">−</button>
+            <div id="nDisplay">8</div>
+            <button class="n-btn" id="btnPlus" onclick="changeN(+1)">+</button>
+        </div>
+
+        <div class="speed-wrap">
+            <label>Velocidad</label>
+            <input type="range" id="speedRange" min="1" max="5" value="3" />
+        </div>
+
+        <button class="btn btn-solve" id="btnSolve" onclick="startSolve()">▶ Resolver</button>
+        <button class="btn btn-reset" id="btnReset" onclick="resetAll()">↺ Reset</button>
+    </div>
+
+    <!-- Status -->
+    <div class="status-bar">
+        <div class="status-pill" id="pillEstado">
+            <div class="dot"></div>
+            <span id="pillTxt">En espera</span>
+        </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+
+        <!-- Board en progreso -->
+        <div class="board-section">
+            <div class="section-title">// Tablero en <span>progreso</span></div>
+            <div class="board-wrapper">
+                <div class="board" id="boardProgress"></div>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:var(--white-sq-hi)"></div> Columna atacada
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:var(--placing)"></div> Colocando
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background:var(--conflict)"></div> Conflicto
+                </div>
+            </div>
+        </div>
+
+        <!-- Board solución -->
+        <div class="board-section">
+            <div class="section-title">// Tablero <span>solución</span></div>
+            <div class="board-wrapper">
+                <div class="board" id="boardSolution"></div>
+            </div>
+            <div class="stats-box">
+                <div class="stat">
+                    <div class="stat-label">Reinas colocadas</div>
+                    <div class="stat-val blue" id="statColocadas">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Pasos totales</div>
+                    <div class="stat-val" id="statPasos">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Retrocesos</div>
+                    <div class="stat-val" id="statRetrocesos">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Tamaño N</div>
+                    <div class="stat-val" id="statN">8</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Array display -->
+    <div style="width:100%;max-width:900px;display:flex;flex-direction:column;gap:10px;">
+        <div class="section-title">// Arreglo de índices · <span>queens[ col ] = fila</span></div>
+        <div class="array-box">
+            <div class="array-title">// queens[i] = fila donde está la reina en la columna i</div>
+            <div class="array-visual" id="arrayVisual"></div>
+            <div class="code-line" id="codeLine">const queens = new Array(N).fill(-1);</div>
+        </div>
+    </div>
+    <section>
+        <h2>Información del Algoritmo</h2>
+        <p>El problema de las N reinas es un problema clásico de inteligencia artificial que consiste en colocar N reinas en un tablero de ajedrez de tamaño N×N de manera que ninguna reina pueda atacar a otra.</p>
+    </section>
+
+    <script>
+        // ══════════════════════════════════════════════════
+        //  ESTADO
+        // ══════════════════════════════════════════════════
+        let N = 8;
+        let solving = false;
+        let stopFlag = false;
+        let stepCount = 0;
+        let backCount = 0;
+        let queens = [];   // queens[col] = fila donde está la reina
+
+        const speedMap = { 1: 600, 2: 300, 3: 120, 4: 40, 5: 8 };
+
+        function getDelay() {
+            return speedMap[document.getElementById('speedRange').value] || 120;
+        }
+
+        function sleep(ms) {
+            return new Promise(r => setTimeout(r, ms));
+        }
+
+        // ══════════════════════════════════════════════════
+        //  CONTROLES N
+        // ══════════════════════════════════════════════════
+        function changeN(delta) {
+            if (solving) return;
+            N = Math.max(8, Math.min(16, N + delta));
+            document.getElementById('nDisplay').textContent = N;
+            document.getElementById('btnMinus').disabled = N <= 8;
+            document.getElementById('btnPlus').disabled = N >= 16;
+            resetAll();
+        }
+
+        // ══════════════════════════════════════════════════
+        //  RENDER TABLERO
+        // ══════════════════════════════════════════════════
+        function renderBoard(boardId, queensArr, highlightCol = -1, conflictRow = -1) {
+            const board = document.getElementById(boardId);
+            board.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+            board.innerHTML = '';
+
+            // Calcular celdas atacadas
+            const attacked = new Set();
+            for (let c = 0; c < N; c++) {
+                if (queensArr[c] === -1) continue;
+                const r = queensArr[c];
+                for (let cc = 0; cc < N; cc++) {
+                    attacked.add(r * N + cc);                // fila
+                    attacked.add(cc * N + c);                // columna
+                    // diagonales
+                    for (let d = -N; d <= N; d++) {
+                        const rr = r + d, cc2 = c + d;
+                        if (rr >= 0 && rr < N && cc2 >= 0 && cc2 < N) attacked.add(rr * N + cc2);
+                        const rr2 = r + d, cc3 = c - d;
+                        if (rr2 >= 0 && rr2 < N && cc3 >= 0 && cc3 < N) attacked.add(rr2 * N + cc3);
+                    }
+                }
+            }
+
+            for (let row = 0; row < N; row++) {
+                for (let col = 0; col < N; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    const isWhite = (row + col) % 2 === 0;
+                    const idx = row * N + col;
+
+                    if (col === highlightCol && row === conflictRow) {
+                        cell.classList.add('conflict');
+                    } else if (col === highlightCol) {
+                        cell.classList.add(isWhite ? 'placing-white' : 'placing-black');
+                    } else if (attacked.has(idx)) {
+                        cell.classList.add(isWhite ? 'highlight-white' : 'highlight-black');
+                    } else {
+                        cell.classList.add(isWhite ? 'white' : 'black');
+                    }
+
+                    if (queensArr[col] === row) {
+                        const q = document.createElement('span');
+                        q.className = 'queen';
+                        q.textContent = '♛';
+                        cell.appendChild(q);
+                    }
+
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        // ══════════════════════════════════════════════════
+        //  RENDER ARREGLO
+        // ══════════════════════════════════════════════════
+        function renderArray(queensArr, currentCol = -1) {
+            const wrap = document.getElementById('arrayVisual');
+            wrap.innerHTML = '';
+            for (let i = 0; i < N; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'array-cell';
+
+                const idx = document.createElement('div');
+                idx.className = 'array-index';
+                idx.textContent = `[${i}]`;
+
+                const val = document.createElement('div');
+                val.className = 'array-val';
+                if (queensArr[i] !== -1) {
+                    val.classList.add(i === currentCol ? 'current' : 'filled');
+                    val.textContent = queensArr[i];
+                } else if (i === currentCol) {
+                    val.classList.add('current');
+                    val.textContent = '?';
+                } else {
+                    val.textContent = '–';
+                }
+
+                cell.appendChild(idx);
+                cell.appendChild(val);
+                wrap.appendChild(cell);
+            }
+        }
+
+        function setCodeLine(txt, active = true) {
+            const el = document.getElementById('codeLine');
+            el.textContent = txt;
+            el.className = 'code-line' + (active ? ' active' : '');
+        }
+
+        // ══════════════════════════════════════════════════
+        //  VALIDACIÓN
+        // ══════════════════════════════════════════════════
+        function isSafe(queensArr, col, row) {
+            for (let c = 0; c < col; c++) {
+                const r = queensArr[c];
+                if (r === row) return false;                       // misma fila
+                if (Math.abs(r - row) === Math.abs(c - col)) return false; // diagonal
+            }
+            return true;
+        }
+
+        // ══════════════════════════════════════════════════
+        //  SOLVER CON ANIMACIÓN
+        // ══════════════════════════════════════════════════
+        async function solve(col) {
+            if (stopFlag) return false;
+
+            if (col === N) return true; // ¡Solución encontrada!
+
+            for (let row = 0; row < N; row++) {
+                if (stopFlag) return false;
+
+                stepCount++;
+                document.getElementById('statPasos').textContent = stepCount;
+                document.getElementById('statColocadas').textContent = col;
+
+                // Mostrar intento
+                queens[col] = row;
+                renderBoard('boardProgress', queens, col, -1);
+                renderArray(queens, col);
+                setCodeLine(`queens[${col}] = ${row};  // probando fila ${row} en col ${col}`);
+                await sleep(getDelay());
+
+                if (isSafe(queens, col, row)) {
+                    // ✅ Posición válida
+                    renderBoard('boardProgress', queens, col, -1);
+                    renderArray(queens, col);
+                    setCodeLine(`✅ queens[${col}] = ${row}  →  posición válida`);
+                    document.getElementById('statColocadas').textContent = col + 1;
+                    await sleep(getDelay() * 0.6);
+
+                    if (await solve(col + 1)) return true;
+
+                    if (stopFlag) return false;
+
+                    // Backtrack
+                    backCount++;
+                    document.getElementById('statRetrocesos').textContent = backCount;
+                    setCodeLine(`↩ Retroceso en col ${col}, row ${row} → backtrack`);
+                    renderBoard('boardProgress', queens, col, row);
+                    renderArray(queens, col);
+                    await sleep(getDelay());
+                } else {
+                    // ❌ Conflicto
+                    setCodeLine(`❌ Conflicto en col ${col}, row ${row}`);
+                    renderBoard('boardProgress', queens, col, row);
+                    renderArray(queens, col);
+                    await sleep(getDelay() * 0.7);
+                }
+
+                queens[col] = -1;
+            }
+
+            return false;
+        }
+
+        // ══════════════════════════════════════════════════
+        //  INICIAR
+        // ══════════════════════════════════════════════════
+        async function startSolve() {
+            if (solving) return;
+            solving = true;
+            stopFlag = false;
+            stepCount = 0;
+            backCount = 0;
+            queens = new Array(N).fill(-1);
+
+            document.getElementById('btnSolve').disabled = true;
+            document.getElementById('btnMinus').disabled = true;
+            document.getElementById('btnPlus').disabled = true;
+            document.getElementById('statN').textContent = N;
+
+            const pill = document.getElementById('pillEstado');
+            pill.className = 'status-pill active';
+            document.getElementById('pillTxt').textContent = 'Resolviendo...';
+
+            renderBoard('boardProgress', queens);
+            renderBoard('boardSolution', queens);
+            renderArray(queens);
+            setCodeLine(`const queens = new Array(${N}).fill(-1);  // iniciando...`);
+
+            const found = await solve(0);
+
+            if (!stopFlag) {
+                if (found) {
+                    // Mostrar solución final
+                    renderBoard('boardProgress', queens);
+                    renderBoard('boardSolution', queens);
+                    renderArray(queens, -1);
+                    setCodeLine(`// ✅ Solución: queens = [${queens.join(', ')}]`, true);
+
+                    pill.className = 'status-pill done';
+                    document.getElementById('pillTxt').textContent = `¡Solución encontrada en ${stepCount} pasos!`;
+                    document.getElementById('statColocadas').textContent = N;
+                } else {
+                    pill.className = 'status-pill';
+                    document.getElementById('pillTxt').textContent = 'Sin solución';
+                }
+            }
+
+            solving = false;
+            document.getElementById('btnSolve').disabled = false;
+            document.getElementById('btnMinus').disabled = N <= 8;
+            document.getElementById('btnPlus').disabled = N >= 16;
+        }
+
+        // ══════════════════════════════════════════════════
+        //  RESET
+        // ══════════════════════════════════════════════════
+        function resetAll() {
+            stopFlag = true;
+            solving = false;
+            queens = new Array(N).fill(-1);
+            stepCount = 0; backCount = 0;
+
+            document.getElementById('statPasos').textContent = '0';
+            document.getElementById('statRetrocesos').textContent = '0';
+            document.getElementById('statColocadas').textContent = '0';
+            document.getElementById('statN').textContent = N;
+            document.getElementById('btnSolve').disabled = false;
+            document.getElementById('btnMinus').disabled = N <= 8;
+            document.getElementById('btnPlus').disabled = N >= 16;
+
+            const pill = document.getElementById('pillEstado');
+            pill.className = 'status-pill';
+            document.getElementById('pillTxt').textContent = 'En espera';
+
+            renderBoard('boardProgress', queens);
+            renderBoard('boardSolution', queens);
+            renderArray(queens);
+            setCodeLine(`const queens = new Array(${N}).fill(-1);`, false);
+        }
+
+        // ══════════════════════════════════════════════════
+        //  INIT
+        // ══════════════════════════════════════════════════
+        resetAll();
+    </script>
+</body>
+
+</html>, initial-scale=1.0">
+<title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
