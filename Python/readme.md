@@ -84,3 +84,11 @@ Trabajando con transacciones en PostgreSQL utilizando Python
 En este ejemplo, se realizan dos operaciones en la base de datos: una inserción y una actualización. Si ambas operaciones se ejecutan correctamente, se llama a commit() para confirmar la transacción y guardar los cambios en la base de datos. Si ocurre un error en cualquiera de las operaciones, se llama a rollback() para revertir la transacción y mantener la integridad de los datos. Finalmente, se cierra la conexión a la base de datos.
 ### Transacciones con bloque with
 Con el bloque with, se hace de manera automática el commit de la transacción al finalizar el bloque, o un rollback si ocurre una excepción.
+
+## CLASE 7
+
+Seguimos trabajando con transacciones en PostgreSQL utilizando Python, ahora vemos el metodo logging para registrar eventos y errores en un archivo de log, lo que nos ayuda a monitorear el comportamiento de nuestra aplicación y a depurar problemas de manera más eficiente.
+Creamos las clases "conexion" y "cursor" para manejar la conexión a la base de datos y las operaciones con el cursor, respectivamente.Tambien creamos la clase "Persona"
+
+### Logging
+El módulo logging de Python proporciona una forma flexible de registrar eventos y errores en un archivo de log. En este ejemplo, se configura el logging para escribir en un archivo llamado 'capa_datos.log' con un nivel de log de ERROR.

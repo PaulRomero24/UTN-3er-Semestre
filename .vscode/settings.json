@@ -4,6 +4,11 @@
             "path": "Python/Clase1",
             "envManager": "ms-python.python:system",
             "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "Python/Clase7",
+            "envManager": "ms-python.python:system",
+            "packageManager": "ms-python.python:pip"
         }
     ],
     "python-envs.defaultEnvManager": "ms-python.python:system"
