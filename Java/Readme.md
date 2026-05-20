@@ -61,3 +61,12 @@ La clase `Object` es la superclase raíz de todas las clases en Java. Todos los 
 
 ### Clases Abstractas
 Una clase abstracta en Java es una clase que no puede ser instanciada y que puede contener métodos abstractos (métodos sin implementación) y métodos concretos (métodos con implementación). Las clases abstractas se utilizan para definir una plantilla para otras clases, permitiendo que las subclases proporcionen implementaciones específicas para los métodos abstractos.
+
+## Clase 7
+    Vemos sobre interfaces y su diferencia con las clases abstractas
+### Interfaces
+Una interfaz en Java es un tipo de referencia que define un conjunto de métodos abstractos (sin implementación) que una clase puede implementar. A diferencia de las clases abstractas, las interfaces no pueden contener métodos concretos (con implementación) ni variables de instancia. Las interfaces se utilizan para definir un contrato que las clases deben cumplir, permitiendo la implementación de múltiples interfaces por parte de una clase, lo que facilita la creación de código flexible y reutilizable.
+### Diferencias entre Interfaces y Clases Abstractas
+- **Instanciación**: Las clases abstractas no pueden ser instanciadas, mientras que las interfaces tampoco pueden ser instanciadas.
+- **Métodos**: Las clases abstractas pueden contener métodos abstractos y concretos, mientras que las interfaces solo pueden contener métodos abstractos (hasta Java 8, después de Java 8, las interfaces pueden contener métodos con implementación utilizando métodos predeterminados).
+- **Herencia**: Una clase puede heredar de una sola clase abstracta, pero puede implementar múltiples interfaces.
