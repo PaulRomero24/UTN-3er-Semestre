@@ -70,3 +70,22 @@ Una interfaz en Java es un tipo de referencia que define un conjunto de métodos
 - **Instanciación**: Las clases abstractas no pueden ser instanciadas, mientras que las interfaces tampoco pueden ser instanciadas.
 - **Métodos**: Las clases abstractas pueden contener métodos abstractos y concretos, mientras que las interfaces solo pueden contener métodos abstractos (hasta Java 8, después de Java 8, las interfaces pueden contener métodos con implementación utilizando métodos predeterminados).
 - **Herencia**: Una clase puede heredar de una sola clase abstracta, pero puede implementar múltiples interfaces.
+
+## Clase 8
+    Vemos sobre excepciones y manejo de errores en JAVA
+### Excepciones
+Las excepciones en Java son eventos que ocurren durante la ejecución de un programa y que interrumpen el flujo normal de las instrucciones. Java proporciona un mecanismo robusto para manejar estas situaciones a través de la jerarquía de clases de excepciones. Las excepciones pueden ser de dos tipos: checked (verificadas) y unchecked (no verificadas). Las excepciones checked deben ser declaradas en la firma del método o manejadas dentro del método, mientras que las excepciones unchecked no requieren esta declaración.
+#### Jerarquía de Excepciones
+- `Throwable`: La clase raíz de todas las excepciones y errores en Java.
+  - `Exception`: La clase base para todas las excepciones que pueden ser manejadas por el programa.
+    - `RuntimeException`: La clase base para todas las excepciones no verificadas.
+    - `IOException`, `SQLException`, `ClassNotFoundException`, `FileNotFoundException`: Ejemplos de excepciones verificadas.
+  - `Error`: La clase base para errores graves que generalmente no pueden ser manejados por el programa.
+    - `OutOfMemoryError`, `StackOverflowError`: Ejemplos de errores.
+
+#### Tipos de Excepciones
+- **Checked Exceptions**: Son excepciones que el compilador requiere que sean manejadas o declaradas. Ejemplos incluyen `IOException`, `InterruptedException`, etc.
+- **Unchecked Exceptions**: Son excepciones que el compilador no requiere que sean manejadas o declaradas. Ejemplos incluyen `NullPointerException`, `ArrayIndexOutOfBoundsException`, etc. Estas excepciones suelen indicar errores de programación que deben ser corregidos.
+
+### Manejo de Errores
+El manejo de errores en Java se realiza utilizando bloques `try-catch`. El código que puede generar una excepción se coloca dentro del bloque `try`, y el código para manejar la excepción se coloca dentro del bloque `catch`. Además, se puede usar un bloque `finally` para ejecutar código que debe ejecutarse independientemente de si se lanzó una excepción o no, como cerrar recursos o realizar limpieza. Es importante manejar las excepciones adecuadamente para evitar que el programa termine abruptamente y para proporcionar una experiencia de usuario más robusta.
