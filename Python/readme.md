@@ -92,3 +92,10 @@ Creamos las clases "conexion" y "cursor" para manejar la conexión a la base de 
 
 ### Logging
 El módulo logging de Python proporciona una forma flexible de registrar eventos y errores en un archivo de log. En este ejemplo, se configura el logging para escribir en un archivo llamado 'capa_datos.log' con un nivel de log de ERROR.
+
+## CLASE 8
+
+Trabajando con la capa de datos en Python utilizando PostgreSQL
+En esta clase, se implementa una capa de datos para manejar la conexión a la base de datos y las operaciones con la base de datos de manera más estructurada y modular. Se crean las clases "Conexion" y "Cursor" para manejar la conexión a la base de datos y las operaciones con el cursor, respectivamente. También se crea la clase "Persona" para representar una entidad en la base de datos.
+### Capa de datos
+La capa de datos es una parte fundamental de la arquitectura de software que se encarga de manejar la interacción con la base de datos. En este ejemplo, se implementa una capa de datos utilizando clases para encapsular la lógica de conexión y operaciones con la base de datos. Esto permite una mejor organización del código, facilita el mantenimiento y mejora la reutilización de la lógica relacionada con la base de datos en toda la aplicación.
