@@ -89,3 +89,11 @@ Las excepciones en Java son eventos que ocurren durante la ejecución de un prog
 
 ### Manejo de Errores
 El manejo de errores en Java se realiza utilizando bloques `try-catch`. El código que puede generar una excepción se coloca dentro del bloque `try`, y el código para manejar la excepción se coloca dentro del bloque `catch`. Además, se puede usar un bloque `finally` para ejecutar código que debe ejecutarse independientemente de si se lanzó una excepción o no, como cerrar recursos o realizar limpieza. Es importante manejar las excepciones adecuadamente para evitar que el programa termine abruptamente y para proporcionar una experiencia de usuario más robusta.
+
+## Clase 9
+
+Creacion de una calculadora con IntelliJ
+
+## Clase 10
+
+Uso de un ***try/catch** y un menu con opciones para listar personas
