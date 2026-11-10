@@ -1,0 +1,14 @@
+{
+    "python-envs.pythonProjects": [
+        {
+            "path": "Clase3",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        },
+        {
+            "path": "Clase4",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
+}
