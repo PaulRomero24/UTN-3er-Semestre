@@ -1,5 +1,6 @@
 package domain;
 
+import domain.TipoEscritura;
 public class Escritor extends Empleado{
     final TipoEscritura tipoEscritura;
 
@@ -18,7 +19,7 @@ public class Escritor extends Empleado{
         return "Escritor: "+ "Tipo de Escritura: "+ tipoEscritura + "}" + " " + super.toString();
     }
 
-    public TipoEscritura gTipoEscritura(){
+    public TipoEscritura getTipoEscritura(){
         return this.tipoEscritura;
     }
 
